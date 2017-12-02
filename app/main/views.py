@@ -1,6 +1,7 @@
 import logging
-from flask import jsonify
-from . import main
+from flask import Blueprint, jsonify
+
+main = Blueprint('main', __name__)
 
 
 @main.route('/')
@@ -9,4 +10,4 @@ def hello_world():
     logger = logging.getLogger()
     logger.info('Hello world')
 
-    return jsonify('Hello world')
+    return jsonify({'Test': 'Hello world'})

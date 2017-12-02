@@ -1,7 +1,25 @@
 # coding: utf-8
-from datetime import datetime as dt
 import logging
+from datetime import datetime as dt
+from re import fullmatch
+from ast import literal_eval
+from os import getenv, environ
 # from . import app
+
+
+def get_config_from_env(keyset):
+    # Si la chaine de caractère ne contient que des chiffres, des - . ou False ou True ou None alors eval sinon string
+    accepted_values = r'-?[0-9]+(\.[0-9]+)?|True|False|None'
+    result = {}
+    for key in keyset.intersection(environ.keys()):
+        if fullmatch(accepted_values, getenv(key)) is not None:
+            env_config_value = literal_eval(getenv(key))
+        else:
+            env_config_value = getenv(key)
+        if env_config_value is not None:
+            result[key] = env_config_value
+
+    return result
 
 
 def string2bool(value, key=''):
@@ -27,6 +45,8 @@ def string2bool(value, key=''):
         else:
             logger.debug(f'msg="string2bool: no change to {key}: {value}"')
             return value
+
+
 
 
 #@app.template_filter()
