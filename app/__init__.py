@@ -63,10 +63,15 @@ def create_app(config_final=None):
         new_handler.level = logging.INFO
 
     # Check all required config variables
-    for key in ['SERVER_NAME', 'PREFERRED_URL_SCHEME', 'REQUEST_TIMEOUT']:
+    for key in ['REQUEST_TIMEOUT']:
         if app.config.get(key) is None:
             app.logger.critical(f'msg="Error: Required config variable not set" err="app.config[\'{key}\'] is None"')
             exit(1)
+
+
+    @app.route("/test")
+    def test_route():
+        return "Test, World!"
 
     app.register_blueprint(main)
     app.logger.info('DEBUG MODE is {0}'.format(app.debug))
